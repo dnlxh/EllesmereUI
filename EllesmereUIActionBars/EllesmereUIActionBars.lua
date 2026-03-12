@@ -3167,8 +3167,36 @@ function EAB:ApplyBackgroundForBar(barKey)
     local padX = s.bgPadX or 0
     local padY = s.bgPadY or 0
     bg:ClearAllPoints()
-    bg:SetPoint("TOPLEFT", frame, "TOPLEFT", -padX, padY)
-    bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", padX, -padY)
+    -- Anchor the background to the actual visible buttons instead of the bar frame
+    if bg then
+        bg:ClearAllPoints()
+
+        local left, right, top, bottom
+
+        for i = 1, (s.numIcons or 0) do
+            local btn = _G[barKey .. "Button" .. i] or _G["EAB_" .. barKey .. "Button" .. i]
+
+            if btn and btn:IsShown() then
+                local l, r = btn:GetLeft(), btn:GetRight()
+                local t, b = btn:GetTop(), btn:GetBottom()
+
+                if l and r and t and b then
+                    left = left and math.min(left, l) or l
+                    right = right and math.max(right, r) or r
+                    top = top and math.max(top, t) or t
+                    bottom = bottom and math.min(bottom, b) or b
+                end
+            end
+        end
+
+        if left and right and top and bottom then
+            bg:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", left - padX, top + padY)
+            bg:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMLEFT", right + padX, bottom - padY)
+            bg:Show()
+        else
+            bg:Hide()
+        end
+    end
     bg:Show()
 end
 
