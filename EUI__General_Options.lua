@@ -1117,8 +1117,8 @@ initFrame:SetScript("OnEvent", function(self)
                             "trainAllButton", "ahCurrentExpansion", "quickLoot",
                             "autoFillDelete", "skipCinematics", "skipCinematicsAuto",
                             "autoAcceptRoleCheck", "autoAcceptRoleCheckShift",
-                            "sortByMythicScore", "autoInsertKeystone", "quickSignup",
-                            "persistSignupNote", "hideBlizzardPartyFrame",
+                            "sortByMythicScore", "autoInsertKeystone", "enablePullTimer",
+                            "enableReadyCheckButton", "quickSignup", "persistSignupNote", "hideBlizzardPartyFrame",
                             "instanceResetAnnounce", "instanceResetAnnounceMsg",
                             "healthMacroEnabled", "healthMacroPrio1", "healthMacroPrio2",
                             "healthMacroPrio3", "foodMacroEnabled", "macroFactory",
@@ -3257,6 +3257,28 @@ initFrame:SetScript("OnEvent", function(self)
               end }
         );  y = y - h
 
+        local qolRow
+        qolRow, h = W:DualRow(parent, y,
+            { type="toggle", text="M+ Pull Timer",
+              tooltip="Adds a pull timer button to the Keystone window for quick /cd 10 commands.",
+              getValue=function()
+                  return EllesmereUIDB and EllesmereUIDB.enablePullTimer ~= false
+              end,
+              setValue=function(v)
+                  if not EllesmereUIDB then EllesmereUIDB = {} end
+                  EllesmereUIDB.enablePullTimer = v
+              end },
+            { type="toggle", text="Ready Check Button",
+              tooltip="Adds a ready check button next to the pull timer for quick /rc commands.",
+              getValue=function()
+                  return EllesmereUIDB and EllesmereUIDB.enableReadyCheckButton ~= false
+              end,
+              setValue=function(v)
+                  if not EllesmereUIDB then EllesmereUIDB = {} end
+                  EllesmereUIDB.enableReadyCheckButton = v
+              end }
+        );  y = y - h
+
         local quickSignupRow
         quickSignupRow, h = W:DualRow(parent, y,
             { type="toggle", text="Quick Signup",
@@ -3268,6 +3290,10 @@ initFrame:SetScript("OnEvent", function(self)
                   if not EllesmereUIDB then EllesmereUIDB = {} end
                   EllesmereUIDB.quickSignup = v
               end },
+            { type="label", text="" }
+        );  y = y - h
+
+        _, h = W:DualRow(parent, y,
             { type="toggle", text="Persistent Signup Note",
               tooltip="Keeps your note text in the Sign Up dialog instead of clearing it each time you open it.",
               getValue=function()
@@ -3279,7 +3305,8 @@ initFrame:SetScript("OnEvent", function(self)
                   if EllesmereUI._applyPersistSignupNote then
                       EllesmereUI._applyPersistSignupNote()
                   end
-              end }
+              end },
+            { type="label", text="" }
         );  y = y - h
 
         _, h = W:Spacer(parent, y, 20);  y = y - h
@@ -4822,6 +4849,8 @@ initFrame:SetScript("OnEvent", function(self)
                 EllesmereUIDB.autoFillDelete = false
                 EllesmereUIDB.sortByMythicScore = false
                 EllesmereUIDB.autoInsertKeystone = false
+                EllesmereUIDB.enablePullTimer = true
+                EllesmereUIDB.enableReadyCheckButton = true
                 EllesmereUIDB.instanceResetAnnounce = false
                 EllesmereUIDB.instanceResetAnnounceMsg = ""
                 EllesmereUIDB.quickSignup = false

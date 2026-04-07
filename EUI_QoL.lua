@@ -806,6 +806,207 @@ qolFrame:SetScript("OnEvent", function(self)
     end
 
     ---------------------------------------------------------------------------
+    --  Mythic+ Pull Timer Button
+    ---------------------------------------------------------------------------
+    do
+        local function CreatePullTimerButton()
+            if not (EllesmereUIDB and EllesmereUIDB.enablePullTimer ~= false) then return end
+            if not ChallengesKeystoneFrame then return end
+            if ChallengesKeystoneFrame.EUI_PullButton then return end
+
+            -- Get EUI accent color
+            local accentR, accentG, accentB = 12/255, 210/255, 157/255  -- EllesmereUI teal
+            if EllesmereUIDB and EllesmereUIDB.accentColor then
+                local ac = EllesmereUIDB.accentColor
+                accentR, accentG, accentB = ac.r, ac.g, ac.b
+            end
+
+            local btn = CreateFrame("Button", nil, ChallengesKeystoneFrame)
+            btn:SetSize(90, 32)
+            btn:SetPoint("TOPRIGHT", ChallengesKeystoneFrame, "TOPRIGHT", 95, -24)
+
+            -- Background
+            local bg = btn:CreateTexture(nil, "BACKGROUND")
+            bg:SetAllPoints()
+            bg:SetColorTexture(0.061, 0.095, 0.120, 1)
+            btn.bg = bg
+
+            -- Border - Top
+            local borderTop = btn:CreateTexture(nil, "OVERLAY")
+            borderTop:SetPoint("TOPLEFT")
+            borderTop:SetPoint("TOPRIGHT")
+            borderTop:SetHeight(1)
+            borderTop:SetColorTexture(accentR, accentG, accentB, 0.7)
+
+            -- Border - Bottom
+            local borderBot = btn:CreateTexture(nil, "OVERLAY")
+            borderBot:SetPoint("BOTTOMLEFT")
+            borderBot:SetPoint("BOTTOMRIGHT")
+            borderBot:SetHeight(1)
+            borderBot:SetColorTexture(accentR, accentG, accentB, 0.7)
+
+            -- Border - Left
+            local borderLeft = btn:CreateTexture(nil, "OVERLAY")
+            borderLeft:SetPoint("TOPLEFT")
+            borderLeft:SetPoint("BOTTOMLEFT")
+            borderLeft:SetWidth(1)
+            borderLeft:SetColorTexture(accentR, accentG, accentB, 0.7)
+
+            -- Border - Right
+            local borderRight = btn:CreateTexture(nil, "OVERLAY")
+            borderRight:SetPoint("TOPRIGHT")
+            borderRight:SetPoint("BOTTOMRIGHT")
+            borderRight:SetWidth(1)
+            borderRight:SetColorTexture(accentR, accentG, accentB, 0.7)
+
+            -- Text
+            local text = btn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+            text:SetPoint("CENTER", 0, 0)
+            text:SetText("Pull 10s")
+            text:SetTextColor(accentR, accentG, accentB, 1)
+            btn.text = text
+
+            -- Hover effect
+            btn:SetScript("OnEnter", function()
+                bg:SetColorTexture(0.10, 0.14, 0.18, 1)
+                text:SetTextColor(1, 1, 1, 1)
+                borderTop:SetColorTexture(accentR, accentG, accentB, 1)
+                borderBot:SetColorTexture(accentR, accentG, accentB, 1)
+                borderLeft:SetColorTexture(accentR, accentG, accentB, 1)
+                borderRight:SetColorTexture(accentR, accentG, accentB, 1)
+            end)
+
+            btn:SetScript("OnLeave", function()
+                bg:SetColorTexture(0.061, 0.095, 0.120, 1)
+                text:SetTextColor(accentR, accentG, accentB, 1)
+                borderTop:SetColorTexture(accentR, accentG, accentB, 0.7)
+                borderBot:SetColorTexture(accentR, accentG, accentB, 0.7)
+                borderLeft:SetColorTexture(accentR, accentG, accentB, 0.7)
+                borderRight:SetColorTexture(accentR, accentG, accentB, 0.7)
+            end)
+
+            btn:SetScript("OnClick", function()
+                local editBox = DEFAULT_CHAT_FRAME.editBox
+                editBox:SetText("/cd 10")
+                ChatEdit_SendText(editBox)
+            end)
+
+            ChallengesKeystoneFrame.EUI_PullButton = btn
+        end
+
+        local function CreateReadyCheckButton()
+            if not (EllesmereUIDB and EllesmereUIDB.enableReadyCheckButton ~= false) then return end
+            if not ChallengesKeystoneFrame then return end
+            if ChallengesKeystoneFrame.EUI_ReadyCheckButton then return end
+
+            -- Get EUI accent color
+            local accentR, accentG, accentB = 12/255, 210/255, 157/255  -- EllesmereUI teal
+            if EllesmereUIDB and EllesmereUIDB.accentColor then
+                local ac = EllesmereUIDB.accentColor
+                accentR, accentG, accentB = ac.r, ac.g, ac.b
+            end
+
+            local btn = CreateFrame("Button", nil, ChallengesKeystoneFrame)
+            btn:SetSize(90, 32)
+            btn:SetPoint("TOPRIGHT", ChallengesKeystoneFrame, "TOPRIGHT", 95, -64)
+
+            -- Background
+            local bg = btn:CreateTexture(nil, "BACKGROUND")
+            bg:SetAllPoints()
+            bg:SetColorTexture(0.061, 0.095, 0.120, 1)
+            btn.bg = bg
+
+            -- Border - Top
+            local borderTop = btn:CreateTexture(nil, "OVERLAY")
+            borderTop:SetPoint("TOPLEFT")
+            borderTop:SetPoint("TOPRIGHT")
+            borderTop:SetHeight(1)
+            borderTop:SetColorTexture(accentR, accentG, accentB, 0.7)
+
+            -- Border - Bottom
+            local borderBot = btn:CreateTexture(nil, "OVERLAY")
+            borderBot:SetPoint("BOTTOMLEFT")
+            borderBot:SetPoint("BOTTOMRIGHT")
+            borderBot:SetHeight(1)
+            borderBot:SetColorTexture(accentR, accentG, accentB, 0.7)
+
+            -- Border - Left
+            local borderLeft = btn:CreateTexture(nil, "OVERLAY")
+            borderLeft:SetPoint("TOPLEFT")
+            borderLeft:SetPoint("BOTTOMLEFT")
+            borderLeft:SetWidth(1)
+            borderLeft:SetColorTexture(accentR, accentG, accentB, 0.7)
+
+            -- Border - Right
+            local borderRight = btn:CreateTexture(nil, "OVERLAY")
+            borderRight:SetPoint("TOPRIGHT")
+            borderRight:SetPoint("BOTTOMRIGHT")
+            borderRight:SetWidth(1)
+            borderRight:SetColorTexture(accentR, accentG, accentB, 0.7)
+
+            -- Text
+            local text = btn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+            text:SetPoint("CENTER", 0, 0)
+            text:SetText("Ready Check")
+            text:SetTextColor(accentR, accentG, accentB, 1)
+            btn.text = text
+
+            -- Hover effect
+            btn:SetScript("OnEnter", function()
+                bg:SetColorTexture(0.10, 0.14, 0.18, 1)
+                text:SetTextColor(1, 1, 1, 1)
+                borderTop:SetColorTexture(accentR, accentG, accentB, 1)
+                borderBot:SetColorTexture(accentR, accentG, accentB, 1)
+                borderLeft:SetColorTexture(accentR, accentG, accentB, 1)
+                borderRight:SetColorTexture(accentR, accentG, accentB, 1)
+            end)
+
+            btn:SetScript("OnLeave", function()
+                bg:SetColorTexture(0.061, 0.095, 0.120, 1)
+                text:SetTextColor(accentR, accentG, accentB, 1)
+                borderTop:SetColorTexture(accentR, accentG, accentB, 0.7)
+                borderBot:SetColorTexture(accentR, accentG, accentB, 0.7)
+                borderLeft:SetColorTexture(accentR, accentG, accentB, 0.7)
+                borderRight:SetColorTexture(accentR, accentG, accentB, 0.7)
+            end)
+
+            btn:SetScript("OnClick", function()
+                local editBox = DEFAULT_CHAT_FRAME.editBox
+                editBox:SetText("/rc")
+                ChatEdit_SendText(editBox)
+            end)
+
+            ChallengesKeystoneFrame.EUI_ReadyCheckButton = btn
+        end
+
+        local initBtn = CreateFrame("Frame")
+        initBtn:RegisterEvent("ADDON_LOADED")
+        initBtn:RegisterEvent("CHALLENGE_MODE_KEYSTONE_RECEPTABLE_OPEN")
+        initBtn:SetScript("OnEvent", function(self, event, arg1)
+            if event == "ADDON_LOADED" and arg1 == "Blizzard_ChallengesUI" then
+                CreatePullTimerButton()
+                CreateReadyCheckButton()
+            elseif event == "CHALLENGE_MODE_KEYSTONE_RECEPTABLE_OPEN" then
+                CreatePullTimerButton()
+                CreateReadyCheckButton()
+            end
+        end)
+
+        if IsAddOnLoaded and IsAddOnLoaded("Blizzard_ChallengesUI") then
+            if ChallengesKeystoneFrame then
+                CreatePullTimerButton()
+                CreateReadyCheckButton()
+            else
+                -- Frame exists but not yet ready, hook OnShow instead
+                hooksecurefunc("ChallengesKeystoneFrame_Show", function()
+                    CreatePullTimerButton()
+                    CreateReadyCheckButton()
+                end)
+            end
+        end
+    end
+
+    ---------------------------------------------------------------------------
     --  Quick Signup (double-click to sign up)
     ---------------------------------------------------------------------------
     do
